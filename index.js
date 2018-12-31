@@ -20,6 +20,8 @@ const Bot = new TwitchBot({
 const commands = [
   ["left","moveleft"],
   ["right","moveright"],
+  ["turnleft","left"],
+  ["turnright","right"],
   ["back","back"],
   ["forward","forward"],
   ["jump","ability 3"],
@@ -27,7 +29,10 @@ const commands = [
   ["shoot","attack"],
   ["crouch","duck"],
   ["sprint","speed"],
-  ["use","use"]
+  ["use","use"],
+  ["pressx","scriptCommand1"],
+  ["pressv","ability 1"]
+  ["stop", "-moveleft;-moveright;-left;-right;-back;-forward;-ability 3;-melee;-attack;-duck;-speed;-use;-scriptCommand1;-bility 1"]
 ];
 
 // ------------------------------------------------------
@@ -75,7 +80,7 @@ Bot.on('join', () => {
     if ((chatter.message).includes("!hold")) {
       let run = (indexLookup(commands,(chatter.message).split('!hold')[1]));
       if (run!=undefined) {
-        movementCmd(run);
+        generalCmd("+"+run);
         console.log(run);
       }
     }
@@ -83,7 +88,7 @@ Bot.on('join', () => {
     else if ((chatter.message).includes("!")) {
       let run = (indexLookup(commands,(chatter.message).split('!')[1]));
       if (run!=undefined) {
-        generalCmd(run);
+        movementCmd(run);
         console.log(run);
       }
     }
