@@ -15,6 +15,7 @@ A mod of Titanfall Twitch Integration for full control of Titanfall 2 via Twitch
 * Crouch - !crouch
 * Sprint - !sprint
 * Shoot - !shoot
+* Reload - !reload
 * Melee - !melee
 * Jump - !jump
 * Press X - !pressx

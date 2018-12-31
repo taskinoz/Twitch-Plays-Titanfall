@@ -27,6 +27,7 @@ const commands = [
   ["jump","ability 3"],
   ["melee","melee"],
   ["shoot","attack"],
+  ["reload","reload"]
   ["crouch","duck"],
   ["sprint","speed"],
   ["use","use"],
