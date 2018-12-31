@@ -17,8 +17,8 @@ A mod of Titanfall Twitch Integration for full control of Titanfall 2 via Twitch
 * Shoot - !shoot
 * Melee - !melee
 * Jump - !jump
-* Press X - pressx
-* Press Y - pressv
+* Press X - !pressx
+* Press Y - !pressv
 * Use/Interact - !use
 
 These commands will run for 1s unless proceded by `hold`. e.g `!holdforward`
