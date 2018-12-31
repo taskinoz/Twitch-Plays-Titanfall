@@ -43,7 +43,7 @@ const commands = [
 
 // Give the instructions on how to play
 function sayCommands() {
-  Bot.say("Use ! to choose an Command");
+  Bot.say("Find the list of commands here - https://github.com/taskinoz/Twitch-Plays-Titanfall");
 }
 
 // Run a command in Titanfall
@@ -73,11 +73,14 @@ function indexLookup(a,b) {
 
 
 Bot.on('join', () => {
-
+  setInterval(sayCommands(),5*(60*1000));
   Bot.on('message', chatter => {
 
+    if ((chatter.message).includes("!help")) {
+      sayCommands();
+    }
     // Hold a movement commands
-    if ((chatter.message).includes("!hold")) {
+    else if ((chatter.message).includes("!hold")) {
       let run = (indexLookup(commands,(chatter.message).split('!hold')[1]));
       if (run!=undefined) {
         generalCmd("+"+run);
