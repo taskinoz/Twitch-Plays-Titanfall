@@ -31,7 +31,13 @@ const commands = [
   ["sprint","speed"],
   ["use","use"],
   ["pressx","scriptCommand1"],
-  ["pressv","ability 1"]
+  ["pressv","ability 1"],
+  ["ability","offhand1"],
+  ["throw","offhand0"],
+  ["titanability","offhand2"],
+  ["changetitan","titan_loadout_select"],
+  ["up","scriptcommand1"],
+  ["down","+ability 1"],
   ["stop", "-moveleft;-moveright;-left;-right;-back;-forward;-ability 3;-melee;-attack;-duck;-speed;-use;-scriptCommand1;-bility 1"]
 ];
 
@@ -74,7 +80,9 @@ function indexLookup(a,b) {
 
 Bot.on('join', () => {
   sayCommands();
-  setInterval(sayCommands(),5*(60*1000));
+  setInterval(function () {
+    sayCommands()
+  },5*(60*1000));
   Bot.on('message', chatter => {
 
     if ((chatter.message).includes("!help")) {
@@ -92,8 +100,13 @@ Bot.on('join', () => {
     else if ((chatter.message).includes("!")) {
       let run = (indexLookup(commands,(chatter.message).split('!')[1]));
       if (run!=undefined) {
-        movementCmd(run);
-        //console.log(run);
+        if ((chatter.message).includes("!changetitan")){
+          generalCmd(run);
+        }
+        else {
+          movementCmd(run);
+          //console.log(run);
+        }
       }
     }
   })
