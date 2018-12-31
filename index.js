@@ -38,8 +38,8 @@ const commands = [
   ["titanability","offhand2"],
   ["changetitan","titan_loadout_select"],
   ["up","scriptcommand1"],
-  ["down","+ability 1"],
-  ["stop", "-moveleft;-moveright;-left;-right;-back;-forward;-ability 3;-melee;-attack;-duck;-speed;-use;-scriptCommand1;-bility 1"]
+  ["down","ability 1"],
+  ["stop", "-moveleft;-moveright;-left;-right;-back;-forward;-ability 3;-melee;-attack;-reload;-duck;-speed;-use;-scriptCommand1;-ability 1;-offhand1;-offhand0;-offhand2;-scriptcommand1;-ability 1"]
 ];
 
 // ------------------------------------------------------
@@ -69,9 +69,13 @@ function movementCmd(a) {
 
 function indexLookup(a,b) {
   for (var i = 0; i < a.length; i++) {
-    let foo = (a[i]).indexOf(b);
-    if (foo>=0) {
-      return commands[i][1]
+    try {
+      let foo = (a[i]).indexOf(b);
+      if (foo>=0) {
+        return commands[i][1]
+      }
+    } catch (e) {
+      // Do Nothing
     }
   }
 }
@@ -94,7 +98,7 @@ Bot.on('join', () => {
       let run = (indexLookup(commands,(chatter.message).split('!hold')[1]));
       if (run!=undefined) {
         generalCmd("+"+run);
-        //console.log(run);
+        console.log(run);
       }
     }
     // Hold a movement commands
@@ -106,7 +110,7 @@ Bot.on('join', () => {
         }
         else {
           movementCmd(run);
-          //console.log(run);
+          console.log(run);
         }
       }
     }
