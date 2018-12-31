@@ -73,6 +73,7 @@ function indexLookup(a,b) {
 
 
 Bot.on('join', () => {
+  sayCommands();
   setInterval(sayCommands(),5*(60*1000));
   Bot.on('message', chatter => {
 
@@ -84,7 +85,7 @@ Bot.on('join', () => {
       let run = (indexLookup(commands,(chatter.message).split('!hold')[1]));
       if (run!=undefined) {
         generalCmd("+"+run);
-        console.log(run);
+        //console.log(run);
       }
     }
     // Hold a movement commands
@@ -92,7 +93,7 @@ Bot.on('join', () => {
       let run = (indexLookup(commands,(chatter.message).split('!')[1]));
       if (run!=undefined) {
         movementCmd(run);
-        console.log(run);
+        //console.log(run);
       }
     }
   })
