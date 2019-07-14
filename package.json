@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/taskinoz/Twitch-Plays-Titanfall#readme",
   "devDependencies": {
-    "fs": "0.0.1-security",
-    "twitch-bot": "^1.2.5"
+    "twitch-bot": "^1.3.5"
   }
 }
