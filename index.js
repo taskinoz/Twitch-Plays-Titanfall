@@ -1,6 +1,6 @@
 // LIBRARY IMPORTS
 // ------------------------------------------------------
-const TwitchBot = require('twitch-bot'); // https://github.com/kritzware/twitch-bot
+const tmi = require('tmi.js');
 var fs = require('fs');
 const pipe = '\\\\.\\pipe\\TTF2SDK'; // Titanfall Pipe
 const Login = JSON.parse(fs.readFileSync('twitch-login.json', 'utf8'));
@@ -9,11 +9,18 @@ const Login = JSON.parse(fs.readFileSync('twitch-login.json', 'utf8'));
 //TWITCH CONFIG
 // ------------------------------------------------------
 //Login Info
-const Bot = new TwitchBot({
-  username: Login.username,
-  oauth: Login.oauth,
-  channels: [Login.channels]
-})
+const client = new tmi.Client({
+	options: { debug: true },
+	connection: {
+		reconnect: true,
+		secure: true
+	},
+	identity: {
+		username: Login.username,
+		password: Login.oauth
+	},
+	channels: [Login.channels]
+});
 // ------------------------------------------------------
 
 // CHAT COMMANDS
@@ -49,22 +56,30 @@ const commands = [
 // Runs through the Commands object and picks 3 random ones
 
 // Give the instructions on how to play
-function sayCommands() {
-  Bot.say("Find the list of commands here - https://github.com/taskinoz/Twitch-Plays-Titanfall");
+function sayCommands(channelName) {
+  client.say(channelName, "Find the list of commands here - https://github.com/taskinoz/Twitch-Plays-Titanfall");
 }
 
 // Run a command in Titanfall
 function generalCmd(a) {
-  fs.writeFileSync(pipe, 'CGetLocalClientPlayer().ClientCommand("'+a+'")');
+  try {
+    fs.writeFileSync(pipe, 'CGetLocalClientPlayer().ClientCommand("'+a+'")');
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // The same as generalCmd but adds a + and a - to
 // start and stop a movement command
 function movementCmd(a) {
-  fs.writeFileSync(pipe, 'CGetLocalClientPlayer().ClientCommand("+'+a+'")');
-  setTimeout(function () {
-    fs.writeFileSync(pipe, 'CGetLocalClientPlayer().ClientCommand("-'+a+'")');
-  }, 1000)
+  try {
+    fs.writeFileSync(pipe, 'CGetLocalClientPlayer().ClientCommand("+'+a+'")');
+    setTimeout(function () {
+      fs.writeFileSync(pipe, 'CGetLocalClientPlayer().ClientCommand("-'+a+'")');
+    }, 1000);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function indexLookup(a,b) {
@@ -80,43 +95,43 @@ function indexLookup(a,b) {
   }
 }
 
+function helpMessage(channelName) {
+  setInterval(function () {
+    sayCommands(channelName)
+  },5*(60*1000));
+}
+
 // ------------------------------------------------------
 
+client.connect(helpMessage(Login.channels)).catch(console.error);
 
-Bot.on('join', () => {
-  sayCommands();
-  setInterval(function () {
-    sayCommands()
-  },5*(60*1000));
-  Bot.on('message', chatter => {
+client.on('message', (channel, tags, message, self) => {
 
-    if ((chatter.message).includes("!help")) {
-      sayCommands();
+  if ((message).includes("!help") && self==false) {
+    sayCommands(channel);
+  }
+  // Hold a movement commands
+  else if ((message).includes("!hold") && self==false) {
+    let run = (indexLookup(commands,(message).split('!hold')[1]));
+    if (run!=undefined) {
+      generalCmd("+"+run);
+      console.log(run);
     }
-    // Hold a movement commands
-    else if ((chatter.message).includes("!hold")) {
-      let run = (indexLookup(commands,(chatter.message).split('!hold')[1]));
-      if (run!=undefined) {
-        generalCmd("+"+run);
+  }
+  // Hold a movement commands
+  else if ((message).includes("!") && self==false) {
+    let run = (indexLookup(commands,(message).split('!')[1]));
+    if (run!=undefined) {
+      if ((message).includes("!changetitan")){
+        generalCmd(run);
+      }
+      else {
+        movementCmd(run);
         console.log(run);
       }
     }
-    // Hold a movement commands
-    else if ((chatter.message).includes("!")) {
-      let run = (indexLookup(commands,(chatter.message).split('!')[1]));
-      if (run!=undefined) {
-        if ((chatter.message).includes("!changetitan")){
-          generalCmd(run);
-        }
-        else {
-          movementCmd(run);
-          console.log(run);
-        }
-      }
+    else {
+      client.say(channel, "Command not found. Use !help to see the list of commands")
     }
-  })
-})
-
-Bot.on('error', err => {
-  console.log(err)
+  }
 })
