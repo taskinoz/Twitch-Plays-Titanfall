@@ -34,6 +34,7 @@ const commands = [
   ["jump","ability 3"],
   ["melee","melee"],
   ["shoot","attack"],
+  ["zoom","zoom"],
   ["reload","reload"]
   ["crouch","duck"],
   ["sprint","speed"],
@@ -44,6 +45,7 @@ const commands = [
   ["throw","offhand0"],
   ["titanability","offhand2"],
   ["changetitan","titan_loadout_select"],
+  ["changeweapon","weaponCycle"],
   ["up","scriptcommand1"],
   ["down","ability 1"],
   ["stop", "-moveleft;-moveright;-left;-right;-back;-forward;-ability 3;-melee;-attack;-reload;-duck;-speed;-use;-scriptCommand1;-ability 1;-offhand1;-offhand0;-offhand2;-scriptcommand1;-ability 1"]
