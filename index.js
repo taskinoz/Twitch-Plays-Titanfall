@@ -35,7 +35,7 @@ const commands = [
   ["melee","melee"],
   ["shoot","attack"],
   ["zoom","zoom"],
-  ["reload","reload"]
+  ["reload","reload"],
   ["crouch","duck"],
   ["sprint","speed"],
   ["use","use"],
